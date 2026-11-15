@@ -1,0 +1,53 @@
+defaults:
+  - data: data
+  - _self_
+
+model_name: unet-continuous
+seed: 67
+learning_rate: 1e-4
+
+model:
+  architecture: unet
+  in_channels: 3
+  condition_channels: 1
+  base_channels: 160
+  channel_mult: [1, 2, 3, 4]
+  blocks_per_level: 2
+  attention_head_dim: 64
+  detail_channels: 32
+  dropout: 0.0
+  gradient_checkpointing: true
+
+training:
+  precision: bf16
+  epochs: 50
+  warmup_epochs: 2
+  min_learning_rate: 1e-5
+  betas: [0.9, 0.999]
+  weight_decay: 0.01
+  grad_clip: 1.0
+  ema_decay: 0.999
+  log_every: 10
+  sample_count: 4
+  sample_steps: 100
+  sample_solver: heun
+  sample_batch_size: 4
+  sample_every_epochs: 5
+  eval_every_epochs: 25
+  checkpoint_every_epochs: 25
+  resume: null            # path to a last.pt checkpoint to continue a run
+  t_sampling: logit_normal
+  max_batches_per_epoch: null
+  max_validation_batches: null
+  channels_last: true
+  # Selection uses EMA validation flow loss; best.pt is written when it improves.
+  checkpoint_metric: val/ema_flow_loss
+  source_balanced_sampling: false
+  depth_conditioning:
+    mode: continuous
+  output_dir: runs/unet
+  # Auxiliary DINOv2 feature alignment (downloads DINOv2 via torch.hub on first use).
+  # Set weight to 0.0 to train without it.
+  repa:
+    layer: 1
+    weight: 0.5
