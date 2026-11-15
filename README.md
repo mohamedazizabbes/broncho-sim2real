@@ -7,7 +7,7 @@
 - **Depth-conditioned generation:** the model maps a depth map plus noise to an RGB image, trained with a conditional flow-matching objective.
 - **Pixel-space U-Net:** a 100M model that runs very fast even on CPUs, deployed in INT8 precision
 
-![`assets/airway-unet-demo.mp4`](assets/airway-unet-demo.mp4)
+https://github.com/user-attachments/assets/58fb6dcc-b40b-4623-8914-dd61cf7d1126
 
 ## 🛠️ Setup
 
