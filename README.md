@@ -79,6 +79,30 @@ Training needs RGB image sources and a directory of cached BREA-Depth maps.
 
 Dataset files are not included.
 
+## Engineering smoke reproduction (no research-quality claim)
+
+This repository includes a small, deterministic, self-contained engineering reproduction path
+for checking that procedural paired RGB/depth data, the tiny U-Net, flow loss, checkpoint I/O,
+and Euler sampling work together. It requires no private data, Hugging Face access, or the
+1000lungs dataset, and it does **not** reproduce or claim the original model, its training setup,
+its accuracy, or its research quality.
+
+Run it on CPU (or on Colab with `--device cuda`) from the repository root:
+
+```bash
+python src/smoke_reproduction.py --device cpu --size 32 --batches 2 --steps 2 --seed 67
+```
+
+The command generates an in-memory procedural paired fixture, trains a reduced U-Net for two
+batches with REPA disabled, saves `runs/smoke/checkpoints/smoke.pt`, reloads the EMA checkpoint,
+and performs a two-step Euler sample. Generated runs are ignored by Git. Run the focused checks with:
+
+```bash
+python -m pytest -q tests/test_smoke_reproduction.py
+```
+
+This path is only a CI/engineering smoke test; the untrained-or-tiny-run checkpoint must not be
+used or presented as a quality result.
 ## Limitations
 
 This is research code. The model has not been evaluated for clinical use and must not be used for diagnosis or treatment decisions. This repository reports no benchmark numbers; validation loss and preview grids are the only training-time signals it produces.
